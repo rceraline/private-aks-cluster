@@ -53,13 +53,13 @@ resource "azurerm_role_assignment" "acr" {
 resource "azurerm_role_assignment" "agw" {
   scope                = azurerm_resource_group.rg.id
   role_definition_name = "Contributor"
-  principal_id         = azurerm_kubernetes_cluster.aks.addon_profile[0].ingress_application_gateway[0].ingress_application_gateway_identity[0].object_id
+  principal_id         = azurerm_kubernetes_cluster.aks.ingress_application_gateway[0].ingress_application_gateway_identity[0].object_id
 }
 
 resource "azurerm_role_assignment" "monitoring" {
   scope                = azurerm_kubernetes_cluster.aks.id
   role_definition_name = "Monitoring Metrics Publisher"
-  principal_id         = azurerm_kubernetes_cluster.aks.addon_profile[0].oms_agent[0].oms_agent_identity[0].object_id
+  principal_id         = azurerm_kubernetes_cluster.aks.oms_agent[0].oms_agent_identity[0].object_id
 }
 
 ### AKS cluster creation
@@ -72,8 +72,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
   private_dns_zone_id        = azurerm_private_dns_zone.aks.id
 
   identity {
-    type                      = "UserAssigned"
-    user_assigned_identity_id = azurerm_user_assigned_identity.aks.id
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.aks.id]
   }
 
   default_node_pool {
@@ -90,16 +90,12 @@ resource "azurerm_kubernetes_cluster" "aks" {
     service_cidr       = "10.1.3.0/24"
   }
 
-  addon_profile {
-    ingress_application_gateway {
-      enabled    = true
-      gateway_id = azurerm_application_gateway.agw.id
-    }
+  ingress_application_gateway {
+    gateway_id = azurerm_application_gateway.agw.id
+  }
 
-    oms_agent {
-      enabled                    = true
-      log_analytics_workspace_id = azurerm_log_analytics_workspace.log.id
-    }
+  oms_agent {
+    log_analytics_workspace_id = azurerm_log_analytics_workspace.log.id
   }
 
   depends_on = [

@@ -39,11 +39,11 @@ resource "azurerm_subnet" "bastion" {
 }
 
 resource "azurerm_subnet" "global" {
-  name                                           = "snet-global"
-  resource_group_name                            = azurerm_resource_group.rg.name
-  virtual_network_name                           = azurerm_virtual_network.vnet_hub.name
-  address_prefixes                               = ["10.0.1.0/24"]
-  enforce_private_link_endpoint_network_policies = true
+  name                                      = "snet-global"
+  resource_group_name                       = azurerm_resource_group.rg.name
+  virtual_network_name                      = azurerm_virtual_network.vnet_hub.name
+  address_prefixes                          = ["10.0.1.0/24"]
+  private_endpoint_network_policies_enabled = true
 }
 
 resource "azurerm_subnet" "agw" {
@@ -54,17 +54,17 @@ resource "azurerm_subnet" "agw" {
 }
 
 resource "azurerm_subnet" "aks" {
-  name                                           = "snet-aks"
-  resource_group_name                            = azurerm_resource_group.rg.name
-  virtual_network_name                           = azurerm_virtual_network.vnet_aks.name
-  address_prefixes                               = ["10.1.1.0/24"]
-  enforce_private_link_endpoint_network_policies = true
+  name                                      = "snet-aks"
+  resource_group_name                       = azurerm_resource_group.rg.name
+  virtual_network_name                      = azurerm_virtual_network.vnet_aks.name
+  address_prefixes                          = ["10.1.1.0/24"]
+  private_endpoint_network_policies_enabled = true
 }
 
 resource "azurerm_subnet" "utils" {
-  name                                           = "snet-utils"
-  resource_group_name                            = azurerm_resource_group.rg.name
-  virtual_network_name                           = azurerm_virtual_network.vnet_aks.name
-  address_prefixes                               = ["10.1.2.0/24"]
-  enforce_private_link_endpoint_network_policies = true
+  name                                      = "snet-utils"
+  resource_group_name                       = azurerm_resource_group.rg.name
+  virtual_network_name                      = azurerm_virtual_network.vnet_aks.name
+  address_prefixes                          = ["10.1.2.0/24"]
+  private_endpoint_network_policies_enabled = true
 }
