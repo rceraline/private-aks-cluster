@@ -44,3 +44,11 @@ resource "azurerm_private_endpoint" "acr" {
     private_dns_zone_ids = [azurerm_private_dns_zone.acr.id]
   }
 }
+
+resource "azurerm_container_registry_agent_pool" "agentpool" {
+  name                      = "myagentpool"
+  resource_group_name       = azurerm_resource_group.rg.name
+  location                  = azurerm_resource_group.rg.location
+  container_registry_name   = azurerm_container_registry.acr.name
+  virtual_network_subnet_id = azurerm_subnet.global.id
+}
