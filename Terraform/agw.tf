@@ -76,6 +76,7 @@ resource "azurerm_application_gateway" "agw" {
     http_listener_name         = local.public_listener_name
     backend_address_pool_name  = local.backend_address_pool_name
     backend_http_settings_name = local.http_setting_name
+    priority                   = 1
   }
 
   #ignore changes since AGW is managed by AGIC
